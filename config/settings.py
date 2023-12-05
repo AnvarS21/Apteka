@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os.path
 from pathlib import Path
 from decouple import config as con
 
@@ -21,18 +21,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = con('SECRET')
+SECRET_KEY = con('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = con('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = con('ALLOWED_HOST').split(',')
+ALLOWED_HOSTS = con('ALLOWED_HOSTS').split(',')
 
-MY_APPS = [
-    ''
-]
 
 # Application definition
+MY_APPS = [
+    'account',
+]
+
+THIRD_PARTY_APPS = [
+    'rest_framework',
+    'django_filters',
+    'drf_yasg',
+    'corsheaders',
+    "phonenumber_field",
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -41,19 +49,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # installed_apps
-    'rest_framework',
-    'rest_framework.authtoken',
-    'dj_rest_auth',
-    'drf_yasg',
-    'django_filters',
-    # my_apps
-    '',
-]
+] + MY_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -88,11 +89,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': con('DB_NAME'),
-        'USER': con('DB_USER'),
-        'PASSWORD': con('DB_PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': 5432
+        'NAME': con('NAME'),
+        'USER': con('USER'),
+        'PASSWORD': con('PASSWORD'),
+        'HOST': con('HOST'),
+        'PORT': con('PORT'),
     }
 }
 
@@ -132,6 +133,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static'
+STATICFILES_DIRS = [
+    BASE_DIR / 'staticfiles',
+]
+
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -141,11 +147,31 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+
+# DJANGO REST FRAMEWORK's config
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'],
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    'DEFAULT_DATETIME_FORMAT': '%d.%m.%Y %H:%M:%S',
+    'DATE_FORMAT': '%d.%m.%Y',
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication'
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
-    # 'DEFAULT_FILTER_BACKENDS': [
-    #     'django_filters.rest_framework.DjangoFilterBackend'
-    # ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10,
 }
+
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:3000',
+#     'https://example.com',
+# ]
+# CORS_ALLOWED_ORIGINS = con('CORS_ALLOWED_ORIGINS').split(',')
+
+CORS_ALLOW_ALL_ORIGINS: True
+
+# PHONENUMBER DEFAULT REGION
+PHONENUMBER_DEFAULT_REGION = 'KG'
+
+AUTH_USER_MODEL = 'account.CustomUser'
