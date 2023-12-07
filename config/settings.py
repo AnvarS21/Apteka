@@ -28,11 +28,11 @@ DEBUG = con('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = con('ALLOWED_HOSTS').split(',')
 
-
-# Application definition
 MY_APPS = [
     'account',
 ]
+
+# Application definition
 
 THIRD_PARTY_APPS = [
     'rest_framework',
@@ -175,3 +175,16 @@ CORS_ALLOW_ALL_ORIGINS: True
 PHONENUMBER_DEFAULT_REGION = 'KG'
 
 AUTH_USER_MODEL = 'account.CustomUser'
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = con('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = con('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = con('EMAIL_PORT', cast=int)
+EMAIL_USE_TLS = con('EMAIL_USE_TLS', cast=bool)
+EMAIL_USE_SSL = con('EMAIL_USE_SSL', cast=bool)
+
+
+
+
+
