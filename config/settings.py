@@ -30,6 +30,7 @@ ALLOWED_HOSTS = con('ALLOWED_HOSTS').split(',')
 
 MY_APPS = [
     'account',
+    'products',
 ]
 
 # Application definition
@@ -40,6 +41,8 @@ THIRD_PARTY_APPS = [
     'drf_yasg',
     'corsheaders',
     "phonenumber_field",
+    'django_rest_passwordreset',
+
 ]
 
 INSTALLED_APPS = [
@@ -183,6 +186,15 @@ EMAIL_HOST_PASSWORD = con('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = con('EMAIL_PORT', cast=int)
 EMAIL_USE_TLS = con('EMAIL_USE_TLS', cast=bool)
 EMAIL_USE_SSL = con('EMAIL_USE_SSL', cast=bool)
+
+
+DJANGO_REST_PASSWORDRESET_TOKEN_CONFIG = {
+    "CLASS":  "django_rest_passwordreset.tokens.RandomStringTokenGenerator" ,
+    "OPTIONS":  {
+        "min_length":  20 ,
+        "max_length":  20
+    }
+}
 
 
 
