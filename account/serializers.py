@@ -54,3 +54,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
         )
+
+class ConfirmUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('token',)

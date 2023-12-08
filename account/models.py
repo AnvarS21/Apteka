@@ -15,11 +15,18 @@ class CustomUser(AbstractUser):
     )
     is_active = models.BooleanField(
         _("active"),
-        default=True,
+        default=False,
         help_text=_(
             "Designates whether this user should be treated as active. "
             "Unselect this instead of deleting accounts."
         ),
+    )
+
+    token = models.CharField(
+        verbose_name='Токен',
+        max_length=20,
+        null=True,
+        blank=True,
     )
 
     REQUIRED_FIELDS = ['email', 'phone_number']

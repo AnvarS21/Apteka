@@ -37,7 +37,7 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField(verbose_name='Количество')
 
     def __str__(self):
-        return f'{self.title}, {self.desc[:25]}'
+        return f'{self.title}'
 
     class Meta:
         verbose_name = 'Продукт'
