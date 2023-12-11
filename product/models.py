@@ -20,7 +20,8 @@ class Product(models.Model):
     desc = models.TextField(verbose_name='Описание',)
     image = models.ImageField(upload_to='image',
                               verbose_name='Изображение',
-                              )
+                              null=True,
+                              blank=True)
     price = models.PositiveIntegerField(verbose_name='Цена',)
     group = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE,
                               verbose_name='Лекарственная группа')

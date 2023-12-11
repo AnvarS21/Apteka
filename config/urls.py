@@ -10,7 +10,9 @@ from drf_yasg import openapi
 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from rest_framework.routers import DefaultRouter
 
+from product.views import ProductViewSet
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -37,13 +39,16 @@ api_auth_urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
 ]
 
+router = DefaultRouter()
+router.register(r'products', ProductViewSet)
+
 api_urlpatterns = [
     path('schema/', include(swagger_urlpatterns)),
     path('auth/', include(api_auth_urlpatterns)),
     path('account/', include('account.urls')),
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 
-]
+] + router.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),

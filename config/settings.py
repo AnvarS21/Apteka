@@ -31,6 +31,7 @@ ALLOWED_HOSTS = con('ALLOWED_HOSTS').split(',')
 MY_APPS = [
     'account',
     'product',
+    'review',
 ]
 
 # Application definition

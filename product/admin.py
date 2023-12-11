@@ -16,6 +16,7 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'title',
         'get_desc',
         'image',
