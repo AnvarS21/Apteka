@@ -22,7 +22,7 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validate_data):
-        if validate_data['first_name'] and validate_data['last_name']:
+        if 'first_name' in validate_data and 'last_name' in validate_data:
             user = User.objects.create(
                 username=validate_data['username'],
                 email=validate_data['email'],

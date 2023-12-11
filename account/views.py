@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from rest_framework import viewsets, generics, permissions
 
-from .permissions import IsOwnerReadOnly
+from .permissions import IsOwner
 
 from .serializers import CustomUserSerializer, CustomUserCreateSerializer, ConfirmUserSerializer
 
@@ -12,12 +12,17 @@ User = get_user_model()
 
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    permission_classes = [IsOwnerReadOnly]
+    permission_classes = [IsOwner()]
 
     def get_serializer_class(self):
         if self.action == 'create':
             return CustomUserCreateSerializer
         return CustomUserSerializer
+
+    def get_permissions(self):
+        if self.action == 'create':
+            return [permissions.AllowAny()]
+        return [IsOwner()]
 
 
 class ConfirmUserView(generics.CreateAPIView):
