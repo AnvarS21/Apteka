@@ -5,15 +5,15 @@ from review.models import Review
 
 User = get_user_model()
 class ReviewCreateSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source=User.id)
-    username = serializers.ReadOnlyField(source=User.username)
+    user = serializers.ReadOnlyField(source='user.id')
+    username = serializers.ReadOnlyField(source='User.username')
     class Meta:
         model = Review
-        exclude = 'created_at',
+        exclude = ('created_at',)
 
 class ReviewSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source=User.id)
-    username = serializers.ReadOnlyField(source=User.username)
+    user = serializers.ReadOnlyField(source='user.id')
+    username = serializers.ReadOnlyField(source='user.username')
     class Meta:
         model = Review
         fields = '__all__'
