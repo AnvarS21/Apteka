@@ -32,6 +32,7 @@ MY_APPS = [
     'account',
     'product',
     'review',
+    'favorite'
 ]
 
 # Application definition

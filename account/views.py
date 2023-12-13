@@ -1,8 +1,11 @@
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
-
+from rest_framework.viewsets import mixins, GenericViewSet
 from rest_framework import viewsets, generics, permissions
+from rest_framework.decorators import action
 
+from favorite.models import Favorite
+from product.serializers import UserFavoritesSerializer
 from .permissions import IsOwner, IsAdmin
 
 from .serializers import CustomUserSerializer, CustomUserCreateSerializer, ConfirmUserSerializer
@@ -26,6 +29,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         return [IsOwner(), ]
 
 
+
 class ConfirmUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = ConfirmUserSerializer
@@ -38,6 +42,13 @@ class ConfirmUserView(generics.CreateAPIView):
             user[0].save()
             return Response( 'OK', status=200)
         return Response('Not Found', status=404)
+
+class UserFavoriteViewSet(mixins.RetrieveModelMixin,
+                      GenericViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserFavoritesSerializer
+    permission_classes = [IsOwner]
+
 
 
 
